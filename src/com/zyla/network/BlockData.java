@@ -5,20 +5,25 @@ import com.zyla.coin.Util;
 public class BlockData {
 	private int blockSize; // to be defined
 	private BlockHeaderData blockHeader; // 140 bytes
-	private int txCount; // 4 bytes (max 2^32 = 4,294,967,296) (always min is 1 since coinbase is one)
+	private int txCount; // 4 bytes (max 2^32 = 4,294,967,296)
 	private CoinbaseData coinbase; // coinbase transaction
-	private TransactionData rawTransactions; // Defined by txCount * 64 bytes
+	private TransactionData[] rawTransactions; // Defined by txCount * 64 bytes
 	
-	public BlockData (BlockHeaderData blockHeader, int txCount) {
+	public BlockData (BlockHeaderData blockHeader, int txCount, CoinbaseData coinbaseTransaction, TransactionData[] rawTransactions) {
 		this.blockHeader = blockHeader;
 		this.txCount = txCount;
-		this.coinbase = new CoinbaseData();
-		this.rawTransactions = new TransactionData();
-		this.blockSize = blockHeader.getHeaderSize() + txCount + coinbase.getCoinbaseSize() + (rawTransactions.getTransactionSize() * txCount); // add function to calculate block size
+		this.rawTransactions = new TransactionData[txCount];
+		this.coinbase = coinbaseTransaction;
+		for (int a = 0; a < rawTransactions.length; a++) {
+			this.rawTransactions[a] = rawTransactions[a];
+		}
+		
+		// this.blockSize = blockHeader.getHeaderSize() + Integer.BYTES + coinbase.getCoinbaseSize() + (rawTransactions[0].getTransactionSize() * txCount); // add function to calculate block size
+		this.blockSize = blockHeader.getHeaderSize() + Integer.BYTES + (rawTransactions[0].getTransactionSize() * txCount); // add function to calculate block size
 	}
 	
-	public int getBlockSize () {
-		return 1;
+	public int getSize () {
+		return blockSize;
 	}
 	
 	public boolean addTransactionToBlock (byte[] rawTransactions) {
@@ -45,20 +50,17 @@ public class BlockData {
 		// Block Header in Byte Form
 		str = blockHeader.convertToByteArray();
 		System.arraycopy(str, 0, out, buf, str.length);
-		Util.printMessage(str.length + "");
 		buf += str.length;
 		
 		// Coinbase Transaction
 		str = coinbase.convertToByteArray();
 		System.arraycopy(str, 0, out, buf, str.length);
-		Util.printMessage(str.length + "");
 		buf += str.length;
 		
 		for (int a = 0; a < txCount; a++) {
 			// Transactions to Byte Form
-			str = rawTransactions.convertToByteArray();         // change rawTransactions to an array and fo rawTransactions[a].convertToByteArray();
+			str = rawTransactions[a].convertToByteArray();
 			System.arraycopy(str, 0, out, buf, str.length);
-			Util.printMessage(str.length + "");
 			buf += str.length;
 		}
 		

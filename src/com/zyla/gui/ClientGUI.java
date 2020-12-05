@@ -9,16 +9,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JToggleButton;
+import javax.swing.UIManager;
 import javax.swing.border.MatteBorder;
 import javax.swing.text.DefaultCaret;
 
@@ -26,6 +32,9 @@ import com.zyla.coin.Util;
 import com.zyla.network.Client;
 import com.zyla.network.Server;
 
+import javax.imageio.ImageIO;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class ClientGUI extends JFrame {
@@ -125,6 +134,52 @@ public class ClientGUI extends JFrame {
 		BoxWrapper.add(SettingsBox);
 		SettingsBox.setLayout(null);
 		
+		JPanel ZylaInfo = new JPanel();
+		ZylaInfo.setBorder(new MatteBorder(0, 0, 0, 1, (Color) new Color(255, 255, 255)));
+		ZylaInfo.setBounds(0, 0, 192, 100);
+		ZylaInfo.setBackground(Grey3);
+		SettingsBox.add(ZylaInfo);
+		ZylaInfo.setLayout(null);
+		
+		JPanel ZylaIconPanel = new JPanel();
+		ZylaIconPanel.setBounds(16, 16, 160, 40);
+		ZylaIconPanel.setBackground(Grey3);
+		ZylaInfo.add(ZylaIconPanel);
+		ZylaIconPanel.setLayout(null);
+		
+//		ImageIcon ZylaBannerImageIcon = new ImageIcon("src/images/ZylaIconBanner.png");
+//		JLabel ZylaBanner = new JLabel("", ZylaBannerImageIcon, JLabel.CENTER);
+//		ZylaBanner.setBounds(0, 0, 160, 40);
+//		ZylaIconPanel.add(ZylaBanner);
+		
+		JPanel ZylaStatus = new JPanel();
+		ZylaStatus.setBounds(16, 64, 160, 20);
+		ZylaStatus.setBackground(Grey3);
+		ZylaInfo.add(ZylaStatus);
+		ZylaStatus.setLayout(null);
+		
+		ImageIcon[] ConnectionImageIcon = new ImageIcon[] {new ImageIcon("src/images/RedBTN.png"), new ImageIcon("src/images/YellowBTN.png"), new ImageIcon("src/images/GreenBTN.png")};
+		JLabel RedCon = new JLabel("", ConnectionImageIcon[0], JLabel.CENTER);
+		RedCon.setBounds((160 - 16 - 4), 2, 16, 16);
+		ZylaStatus.add(RedCon);
+		RedCon.setVisible(true);
+		
+		JLabel YellowCon = new JLabel("", ConnectionImageIcon[1], JLabel.CENTER);
+		YellowCon.setBounds((160 - 16 - 4), 2, 16, 16);
+		ZylaStatus.add(YellowCon);
+		YellowCon.setVisible(false);
+		
+		JLabel GreenCon = new JLabel("", ConnectionImageIcon[2], JLabel.CENTER);
+		GreenCon.setBounds((160 - 16 - 4), 2, 16, 16);
+		ZylaStatus.add(GreenCon);
+		GreenCon.setVisible(false);
+		
+		JLabel ZylaStatusLabel = new JLabel("Connection Status");
+		ZylaStatusLabel.setForeground(Color.WHITE);
+		ZylaStatusLabel.setFont(new Font("Coco Gothic Light", Font.PLAIN, 13));
+		ZylaStatusLabel.setBounds(4, 0, 120, 20);
+		ZylaStatus.add(ZylaStatusLabel);
+		
 		JButton StartServer = new JButton("Start Server");
 		StartServer.setFocusPainted(false);
 		StartServer.setContentAreaFilled(false);
@@ -132,7 +187,7 @@ public class ClientGUI extends JFrame {
 		StartServer.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 255, 255)));
 		StartServer.setForeground(WHITE);
 		StartServer.setFont(new Font("Calibri Light", Font.ITALIC, 12));
-		StartServer.setBounds(16, 12, 160, 32);
+		StartServer.setBounds(16, 500, 160, 32);
 		StartServer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e){
@@ -171,7 +226,7 @@ public class ClientGUI extends JFrame {
 		StartClient.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 255, 255)));
 		StartClient.setForeground(WHITE);
 		StartClient.setFont(new Font("Calibri Light", Font.ITALIC, 12));
-		StartClient.setBounds(16, 56, 160, 32);
+		StartClient.setBounds(16, 550, 160, 32);
 		StartClient.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e){
@@ -184,6 +239,30 @@ public class ClientGUI extends JFrame {
 			}
 		});
 		SettingsBox.add(StartClient);
+		
+		JPanel MenuToggle = new JPanel();
+		MenuToggle.setBounds(16, 100 + 16, 160, (window_height - 32 - 100 - 32));
+		MenuToggle.setBackground(Grey3);
+		SettingsBox.add(MenuToggle);
+		MenuToggle.setLayout(null);
+		
+		UIManager.put("ToggleButton.select", Grey5);
+		ButtonGroup menuButtonGroup = new ButtonGroup();
+		ActionListener menuButtonListener = actionEvent -> actionEvent.getActionCommand();
+		
+		int a = 0;
+		
+		JToggleButton BTNStart = new JToggleButton();
+		BTNStart.addActionListener(menuButtonListener);
+		BTNStart.setBounds(0, (a * 80), 160, 80);
+		a++;
+		BTNStart.setBackground(Grey4);
+		BTNStart.setBorderPainted(false);
+		BTNStart.setFocusPainted(false);
+		menuButtonGroup.add(BTNStart);
+		MenuToggle.add(BTNStart);
+		BTNStart.setLayout(null);
+		
 		
 		JPanel MainPanel = new JPanel();
 		MainPanel.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(255, 255, 255)));
@@ -221,7 +300,7 @@ public class ClientGUI extends JFrame {
 		Console.setBounds(16, 16, (window_width - 192 - 32), (window_height - 32 - 100 - 32));
 		Console.setLayout(null);
 		
-		JScrollPane ConsoleScroll = new JScrollPane(Console, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		JScrollPane ConsoleScroll = new JScrollPane(Console, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		ConsoleScroll.setBounds(16, 16, (window_width - 192 - 32), (window_height - 32 - 100 - 32));
 		ConsoleScroll.getVerticalScrollBar().setUI(new CustomScrollUI());
 		ConsoleScroll.getHorizontalScrollBar().setUI(new CustomScrollUI());
@@ -233,5 +312,17 @@ public class ClientGUI extends JFrame {
 		PrintStream pStream = new PrintStream(new TextAreaOutputStream(Console));
 		System.setOut(pStream);
 		System.setErr(pStream);
+	}
+	
+	protected ImageIcon createImageIcon(String path) {
+		
+		java.net.URL imgURL = getClass().getResource(path);
+		
+		if (imgURL != null) {
+			return new ImageIcon(imgURL);
+		} else {
+			Util.printMessage("Could not find icon @ path : " + path);
+			return null;
+		}
 	}
 }

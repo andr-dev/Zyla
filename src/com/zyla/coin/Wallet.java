@@ -91,9 +91,9 @@ public class Wallet {
 			KeyFactory kf = KeyFactory.getInstance("RSA");
 			this.privateKey = kf.generatePrivate(ksP);
 			this.publicKey = kf.generatePublic(ksX);
-			Util.printMessage("COMPLETE");
+			Util.printMessage("Wallet Import Completed");
 		} catch (Exception e) {
-			Util.printMessage(e + "");
+			Util.printMessage(e.getMessage());
 		}
 	}
 	
@@ -134,13 +134,10 @@ public class Wallet {
 			TransactionOutput utxo = tOut.getValue();
 			total += utxo.value;
 			inputs.add(new TransactionInput(utxo.id));
-			if (total >= value) { // or equal to?
+			if (total >= value) { // or equal to? (used to be total > value
 				break;
 			}
 		}
-		
-		/* DEBUG */
-		// Util.printMessage("Total : " + total);
 		
 		Transaction output = new Transaction(this.publicKey, reciever, value, inputs);
 		output.genSignature(this.privateKey);

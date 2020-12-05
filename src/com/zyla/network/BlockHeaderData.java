@@ -33,19 +33,16 @@ public class BlockHeaderData {
 		// Previous Hash
 		str = this.previousHash.getBytes();
 		System.arraycopy(str, 0, out, buf, str.length);
-		Util.printMessage(str.length + "");
 		buf += str.length;
 		
 		// Merkle Root
 		str = this.merkleRoot.getBytes();
 		System.arraycopy(str, 0, out, buf, str.length);
-		Util.printMessage(str.length + "");
 		buf += str.length;
 		
 		// Time Stamp
 		str = tSByte;
 		System.arraycopy(str, 0, out, buf, str.length);
-		Util.printMessage(str.length + "");
 		buf += str.length;
 		
 		// Nonce

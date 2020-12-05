@@ -127,4 +127,13 @@ public class Util {
 		
 		return outRate;
 	}
+
+	public static byte[] longToBytes(long seqNum) {
+		byte[] out = new byte[8];
+		for (int i = 7; i >= 0; i--) {
+			out[i] = (byte)(seqNum & 0xFF);
+			seqNum >>= 8;
+		}
+		return out;
+	}
 }

@@ -27,6 +27,7 @@ public class Server extends Thread {
 	DataOutputStream out;
 	
 	public final int IP = 26373;
+	private int seqNum = 0;
 	
 	public Server (Socket clientSocket) {
 		this.socket = clientSocket;
@@ -40,13 +41,17 @@ public class Server extends Thread {
 		
 		while (true) {
 			try {
-				byte[] msg = new byte[HEADER_SIZE];
+				byte[] msg = new byte[512];
+				
 				in.readFully(msg);
 				
-				if (msg[0] == 0 && msg[1] == 0) {
+				if (msg[0] == 0) {
 					Util.printMessage("BLOCK INCOMING!!!");
 					
-					byte[] print = new byte[HEADER_SIZE - 2];
+					ZylaProtocol newBlock = new ZylaProtocol(msg[0]);
+					seqNum++;
+					
+					byte[] print = new byte[newBlock.getSize()];
 					
 					for (int a = 2; a < msg.length; a++) {
 						print[a - 2] = msg[a];

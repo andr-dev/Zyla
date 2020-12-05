@@ -161,7 +161,7 @@ public class ZylaBlockChain {
 	}
 	
 	public void genGenesis() {
-		genTransaction = new Transaction(genWallet.getPublicKey(), wallet.getPublicKey(), 100, null);
+		genTransaction = new Transaction(genWallet.getPublicKey(), wallet.getPublicKey(), 100, new ArrayList<TransactionInput>());
 		genTransaction.genSignature(genWallet.getPrivateKey());
 		genTransaction.transID = "0000000000000000000000000000000000000000000000000000000000000001";
 		genTransaction.outputs.add(new TransactionOutput(genTransaction.reciever, genTransaction.value, genTransaction.transID));
@@ -175,6 +175,8 @@ public class ZylaBlockChain {
 		gen.addTransaction(genTransaction);
 		addBlock(gen);
 		Util.printMessage(gen.getMerkleRoot() + "");
+		
+		Util.printMessage("Genesis|Wallet 1 Balance : " + wallet.getBalance() + "|Wallet 2 Balance : " + wallet2.getBalance() + "|Wallet 3 Balance : " + wallet3.getBalance());
 	}
 	
 	public void perpareBlock() {
