@@ -12,10 +12,10 @@
 package com.zyla.coin;
 
 public class TransactionInput {
-	public String TransactionOutputID;
-	public TransactionOutput UTXO;
-	
-	public TransactionInput (String TransactionOutputID) {
-		this.TransactionOutputID = TransactionOutputID;
-	}
+    public String TransactionOutputID;
+    public TransactionOutput UTXO;
+
+    public TransactionInput (String TransactionOutputID) {
+        this.TransactionOutputID = TransactionOutputID;
+    }
 }
