@@ -22,9 +22,9 @@ import javax.swing.JTextArea;
 import javax.swing.border.MatteBorder;
 import javax.swing.text.DefaultCaret;
 
-import com.zyla.client.Client;
 import com.zyla.coin.Util;
-import com.zyla.server.Server;
+import com.zyla.network.Client;
+import com.zyla.network.Server;
 
 import javax.swing.JButton;
 

@@ -1,4 +1,4 @@
-package com.zyla.server;
+package com.zyla.network;
 
 import java.net.ServerSocket;
 import java.net.Socket;

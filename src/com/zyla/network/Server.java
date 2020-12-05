@@ -1,4 +1,4 @@
-package com.zyla.server;
+package com.zyla.network;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,6 +18,9 @@ import com.zyla.coin.Block;
 import com.zyla.coin.Util;
 
 public class Server extends Thread {
+	
+	public final static int HEADER_SIZE = 142;
+	
 	protected Socket socket;
 	
 	DataInputStream in;
@@ -37,13 +40,13 @@ public class Server extends Thread {
 		
 		while (true) {
 			try {
-				byte[] msg = new byte[138];
+				byte[] msg = new byte[HEADER_SIZE];
 				in.readFully(msg);
 				
 				if (msg[0] == 0 && msg[1] == 0) {
 					Util.printMessage("BLOCK INCOMING!!!");
 					
-					byte[] print = new byte[msg.length - 2];
+					byte[] print = new byte[HEADER_SIZE - 2];
 					
 					for (int a = 2; a < msg.length; a++) {
 						print[a - 2] = msg[a];
@@ -52,17 +55,27 @@ public class Server extends Thread {
 					String previousHash = new String(print).substring(0, 64);
 					String currentHash = new String(print).substring(64, 128);
 					ByteBuffer tSBuffer = ByteBuffer.allocate(Long.BYTES);
-					byte[] tSByte = new byte[8];
-					for (int a = 0; a < 8; a++) {
+					byte[] tSByte = new byte[Long.BYTES];
+					for (int a = 0; a < Long.BYTES; a++) {
 						tSByte[a] = print[128 + a];
 					}
 					tSBuffer.put(tSByte);
 					tSBuffer.flip();
 					long timeStamp = tSBuffer.getLong();
 					
+					ByteBuffer nBuffer = ByteBuffer.allocate(Integer.BYTES);
+					byte[] nByte = new byte[Integer.BYTES];
+					for (int a = 0; a < Integer.BYTES; a++) {
+						nByte[a] = print[136 + a];
+					}
+					nBuffer.put(nByte);
+					nBuffer.flip();
+					int nonce = nBuffer.getInt();
+					
 					Util.printMessage(previousHash);
 					Util.printMessage(currentHash);
 					Util.printMessage(timeStamp + "");
+					Util.printMessage(nonce + "");
 				}
 			} catch (Exception e ) {
 				Util.printMessage("ERROR|" + e);

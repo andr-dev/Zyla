@@ -45,6 +45,8 @@ public class ZylaBlockChain {
 	public static ArrayList<Block> bChain = new ArrayList<Block>();
 	private static int dif = 5;
 	
+	private static Block newBlock;
+	
 	public ZylaBlockChain () {
 		bChain = new ArrayList<Block>();
 	}
@@ -174,6 +176,11 @@ public class ZylaBlockChain {
 		addBlock(gen);
 		Util.printMessage(gen.getMerkleRoot() + "");
 	}
+	
+	public void perpareBlock() {
+		
+	}
+	
 //	
 //	public static void main (String[] args) {
 //		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
